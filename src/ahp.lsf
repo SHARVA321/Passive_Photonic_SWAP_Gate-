@@ -1,0 +1,118 @@
+clear;
+
+addfdtd;
+set("dimension", "3D");
+set("x min", -10e-6);
+set("x max", 10e-6);
+set("y min", -5e-6);
+set("y max", 5e-6);
+set("z min", -1e-6);
+set("z max", 1e-6);
+set("mesh accuracy", 3);
+set("simulation time", 1000e-15);
+set("index", 1);
+
+addrect;
+set("name", "waveguide1");
+set("x", 0);
+set("y", 0.3e-6);
+set("z", 0);
+set("x span", 20e-6);
+set("y span", 0.5e-6);
+set("z span", 0.22e-6);
+set("material", "Si (Silicon) - Palik");
+
+addrect;
+set("name", "waveguide2");
+set("x", 0);
+set("y", -0.3e-6);
+set("z", 0);
+set("x span", 20e-6);
+set("y span", 0.5e-6);
+set("z span", 0.22e-6);
+set("material", "Si (Silicon) - Palik");
+
+addrect;
+set("name", "coupling_region");
+set("x", 0);
+set("y", 0);
+set("z", 0);
+set("x span", 6.25e-6);
+set("y span", 1.1e-6);
+set("z span", 0.22e-6);
+set("material", "Si (Silicon) - Palik");
+
+addmode;
+set("name", "input1");
+set("injection axis", "x");
+set("direction", "forward");
+set("x", -8e-6);
+set("y", 0.3e-6);
+set("z", 0);
+set("y span", 1e-6);
+set("z span", 0.5e-6);
+set("wavelength start", 1.55e-6);
+set("wavelength stop", 1.55e-6);
+set("mode selection", "fundamental TE mode");
+
+addmode;
+set("name", "input2");
+set("injection axis", "x");
+set("direction", "forward");
+set("x", -8e-6);
+set("y", -0.3e-6);
+set("z", 0);
+set("y span", 1e-6);
+set("z span", 0.5e-6);
+set("wavelength start", 1.55e-6);
+set("wavelength stop", 1.55e-6);
+set("mode selection", "fundamental TE mode");
+set("enabled", 0);
+
+addpower;
+set("name", "output1");
+set("monitor type", "2D X-normal");
+set("x", 8e-6);
+set("y", 0.3e-6);
+set("z", 0);
+set("y span", 1e-6);
+set("z span", 0.5e-6);
+
+addpower;
+set("name", "output2");
+set("monitor type", "2D X-normal");
+set("x", 8e-6);
+set("y", -0.3e-6);
+set("z", 0);
+set("y span", 1e-6);
+set("z span", 0.5e-6);
+
+addpower;
+set("name", "field_monitor");
+set("monitor type", "2D Z-normal");
+set("z", 0);
+set("x min", -10e-6);
+set("x max", 10e-6);
+set("y min", -2e-6);
+set("y max", 2e-6);
+
+run;
+
+E1_port1 = getelectric("output1");
+E1_port2 = getelectric("output2");
+
+select("input1");
+set("enabled", 0);
+select("input2");
+set("enabled", 1);
+
+run;
+
+E2_port1 = getelectric("output1");
+E2_port2 = getelectric("output2");
+
+?"SWAP Gate Analysis:";
+?"Input 1 -> Output 1 transmission: " + num2str(intensity(E1_port1));
+?"Input 1 -> Output 2 transmission: " + num2str(intensity(E1_port2));
+?"Input 2 -> Output 1 transmission: " + num2str(intensity(E2_port1));
+?"Input 2 -> Output 2 transmission: " + num2str(intensity(E2_port2));

@@ -38,5 +38,5 @@ For a comprehensive understanding of the project, including detailed theoretical
 [Passive Photonic SWAP Gate Report](docs/Passive_Photonic_SWAP_Gate_Report.pdf)
 
 ## Contributors
-* Your Name (PES1UG22EC269)
+* Sharva Ranganath (PES1UG22EC269)
 * Aprameya Kulkarni (PES1UG22EC914)
